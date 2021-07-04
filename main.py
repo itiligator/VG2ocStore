@@ -26,9 +26,14 @@ try:
     ) as connection:
         print(connection)
         with connection.cursor() as cursor:
-            show_table_query = "DESCRIBE product"
+            show_table_query = "SELECT category.category_id, category.parent_id, category_description.name FROM `category`\
+INNER JOIN `category_description` ON category.category_id = category_description.category_id WHERE category_description.name = 'Настойка'"
             cursor.execute(show_table_query)
-            for db in cursor:
-                print(db)
+            result = cursor.fetchall()
+            for row in result:
+                print(type(row))
+                print(row)
+                print(row[0])
+
 except Error as e:
     logging.exception('Problem with DB connection')
