@@ -1,8 +1,11 @@
 import logging
 import re
 from mysql.connector import connect, Error
+from offer_classes import Category
+
 
 logging.basicConfig(filename='importer.log', level=logging.DEBUG)
+
 
 try:
     with open('config.php', 'r') as config_file:
@@ -24,16 +27,8 @@ try:
         password=config['DB_PASSWORD'],
         database=config['DB_PREFIX']+config['DB_DATABASE']
     ) as connection:
-        print(connection)
-        with connection.cursor() as cursor:
-            show_table_query = "SELECT category.category_id, category.parent_id, category_description.name FROM `category`\
-INNER JOIN `category_description` ON category.category_id = category_description.category_id WHERE category_description.name = 'Настойка'"
-            cursor.execute(show_table_query)
-            result = cursor.fetchall()
-            for row in result:
-                print(type(row))
-                print(row)
-                print(row[0])
+        test_cat = Category("testcat", None, connection)
+        print(test_cat.ID)
 
 except Error as e:
     logging.exception('Problem with DB connection')
