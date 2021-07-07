@@ -27,8 +27,10 @@ try:
         password=config['DB_PASSWORD'],
         database=config['DB_PREFIX']+config['DB_DATABASE']
     ) as connection:
-        test_cat = Category("testcat", None, connection)
+        test_cat = Category("testcat4", None, connection)
         print(test_cat.ID)
+        test_cat2 = Category("testcat6", test_cat, connection)
+        print(test_cat2.ID)
 
 except Error as e:
     logging.exception('Problem with DB connection')

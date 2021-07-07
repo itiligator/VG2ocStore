@@ -51,14 +51,14 @@ class Category:
                         ON category.category_id = category_description.category_id \
                         WHERE category_description.name = '" + self.name + "'"
         if self.parent is not None:
-            search_query += " AND category.parent_id = '" + self.parent.ID + "'"
+            search_query += " AND category.parent_id = '" + str(self.parent.ID) + "'"
 
         with self._connection.cursor() as cursor:
             cursor.execute(search_query)
             result = cursor.fetchall()
             if len(result) == 1:
                 logging.debug('Found same category in DB')
-                return result[0]
+                return result[0][0]
             else:
                 raise ValueError("Получили " + str(len(result)) + " совпадений по наименованию категории " + self.name + \
                                  " и ID родительской категории")
@@ -71,28 +71,51 @@ class Category:
         # category, category_description, category_to_layout, category_to_store,
         insert_query = "INSERT INTO category " \
                        "SET parent_id=" + (str(self.parent.ID) if self.parent else "0") + \
-                       ", top =" + ("0" if self.parent else "1") + ", `column`=1, status=1,"\
+                       ", top=" + ("0" if self.parent else "1") + ", `column`=1, status=1,"\
                        " date_added='" + time.strftime('%Y-%m-%d %H:%M:%S') + "', " \
                        " date_modified='" + time.strftime('%Y-%m-%d %H:%M:%S') + "';"
         with self._connection.cursor() as cursor:
-            logging.debug("Writing category data to DB")
-            logging.debug("Insert query is: ")
-            logging.debug(insert_query)
-            cursor.execute(insert_query)
-            lastid = cursor.lastrowid
-            insert_query = "INSERT INTO category_description " \
-                           "SET category_id=" + str(lastid) + ", language_id=1, name='" + self.name + "', description='', " \
-                           "meta_title='', meta_description='', meta_keyword='', meta_h1='';" \
-                           "INSERT INTO category_to_layout " \
-                           "SET category_id=" + str(lastid) + ", store_id=0, layout_id=0;" \
-                           "INSERT INTO category_to_store " \
-                           "SET category_id=" + str(lastid) + ", store_id=0;"
-            if self.parent:
-                # если это не коренная категория, то вносим запись в category_path (паттерн "Closure Table")
-                insert_query += "INSERT INTO category_path" \
-                                "SET category_id=" + str(lastid) + ", path_id=" + str(lastid) + ", level=1;" \
-                                "INSERT INTO category_path" \
-                                "SET category_id=" + str(lastid) + ", path_id=" + str(self.parent.ID) + ", level=0;"
-            logging.debug("Insert query is: ")
-            logging.debug(insert_query)
-            cursor.execute(insert_query, multi=True)
+            try:
+                logging.debug("Writing category data to DB")
+                logging.debug("Insert query is: ")
+                logging.debug(insert_query)
+                cursor.execute(insert_query)
+
+                lastid = cursor.lastrowid
+
+                insert_query = "INSERT INTO category_description " \
+                               "SET category_id=" + str(lastid) + ", language_id=1, name='" + self.name + "', " \
+                               "description='', meta_title='', meta_description='', meta_keyword='', meta_h1='';"
+                logging.debug("Insert query is: ")
+                logging.debug(insert_query)
+                cursor.execute(insert_query)
+
+                insert_query = "INSERT INTO category_to_layout " \
+                               "SET category_id=" + str(lastid) + ", store_id=0, layout_id=0;"
+                logging.debug("Insert query is: ")
+                logging.debug(insert_query)
+                cursor.execute(insert_query)
+
+                insert_query = "INSERT INTO category_to_store " \
+                               "SET category_id=" + str(lastid) + ", store_id=0;"
+                logging.debug("Insert query is: ")
+                logging.debug(insert_query)
+                cursor.execute(insert_query)
+
+                insert_query = "INSERT INTO category_path " \
+                               "SET category_id=" + str(lastid) + ", path_id=" + str(lastid) + ", level=" + \
+                               ("1" if self.parent else "0") + ";"
+                logging.debug("Insert query is: ")
+                logging.debug(insert_query)
+                cursor.execute(insert_query)
+
+                if self.parent:
+                    insert_query = "INSERT INTO category_path " \
+                                    "SET category_id=" + str(lastid) + ", path_id=" + str(self.parent.ID) + ", level=0;"
+                    logging.debug("Insert query is: ")
+                    logging.debug(insert_query)
+                    cursor.execute(insert_query)
+
+                return lastid
+            except mysql.connector.Error:
+                logging.exception("Something went wrong")
