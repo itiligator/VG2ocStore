@@ -1,7 +1,7 @@
 import logging
 import re
 from mysql.connector import connect, Error
-from offer_classes import Category
+from opencart_import import Category, AttributeGroup, Attribute
 
 
 logging.basicConfig(filename='importer.log', level=logging.DEBUG)
@@ -27,10 +27,14 @@ try:
         password=config['DB_PASSWORD'],
         database=config['DB_PREFIX']+config['DB_DATABASE']
     ) as connection:
-        test_cat = Category("testcat4", None, connection)
-        print(test_cat.ID)
-        test_cat2 = Category("testcat6", test_cat, connection)
-        print(test_cat2.ID)
+        # test_cat = Category("Вино", None, connection)
+        # print(test_cat.ID)
+        # test_cat2 = Category("Столовое", test_cat, connection)
+        # print(test_cat2.ID)
+        test_attr_group = AttributeGroup("Вино", connection)
+        print(test_attr_group.ID)
+        test_attr = Attribute("Тестовый", test_attr_group, connection)
+        print(test_attr.ID)
 
 except Error as e:
     logging.exception('Problem with DB connection')
