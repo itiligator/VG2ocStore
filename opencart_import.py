@@ -1,6 +1,7 @@
 import mysql.connector.connection
 import logging
 import time
+from datetime import datetime
 
 
 class OpencartObject:
@@ -17,7 +18,6 @@ class OpencartObject:
             return self._ID
         else:
             self.SyncWithDB()
-
             return self._ID
 
     @ID.setter
@@ -273,6 +273,79 @@ class Attribute(OpencartObject):
         pass
 
 
+class ProductOptions:
+
+    def __init__(self, connection: mysql.connector.connection.MySQLConnection):
+        self.categories = {}
+        self.connection = connection
+        self.alco_group = AttributeGroup('Алкогольные товары', self.connection)
+        self.wine_group = AttributeGroup('Вино', self.connection)
+
+        self.capacity = Attribute('Емкость', self.alco_group, connection)
+        self.sturdiness = Attribute('Крепкость', self.alco_group, connection)
+        self.country = Attribute('Страна', self.alco_group, connection)
+
+        self.color = Attribute('Цвет', self.wine_group, connection)
+        self.taste = Attribute('Сахар', self.wine_group, connection)
+
+    def cat(self, tag):
+        try:
+            return self.categories[tag]
+        except KeyError:
+            if isinstance(tag, str):
+                self.categories[tag] = Category(name=tag, parent=None, connection=self.connection)
+            elif isinstance(tag, tuple):
+                self.categories[tag] = Category(name=tag[0], parent=self.cat(tag[1]), connection=self.connection)
+            else:
+                return AttributeError
+            return self.categories[tag]
+
+
+    def generate(self, options: dict):
+        result = {
+            'model': options['code'],
+            'sku': options['article'],
+            'name': options['name'],
+            'price': options['price'],
+        }
+
+        if options['sale'] == 1:
+            result['sale'] = {
+                "sale_price": options['sale_price'],
+                "date_end": datetime.utcfromtimestamp(options['end_date']).strftime('%Y-%m-%d %H:%M:%S')
+            }
+        else:
+            result['sale'] = None
+
+        categories = {'main': self.cat(options['category']).ID,
+                      'secondary': self.cat((options["type"], options['category'])).ID}
+
+        attributes = {self.capacity.ID: options['capacity'],
+                      self.sturdiness.ID: options['sturdiness'],
+                      self.country.ID: options['country']}
+
+        if options['category'] == 'ВИНО':
+            attributes[self.taste.ID] = options['taste']
+            attributes[self.color.ID] = options['color']
+
+        result['categories'] = categories
+        result['attributes'] = attributes
+
+        result['quantity'] = options['residue_avangard']
+        for key, val in options:
+            if key.isdigit():
+                result['quantity'] += val
+
+
 class Product(OpencartObject):
-    pass
+    def __init__(self, name, options, connection):
+        logging.debug("Attribute initialization")
+        self._options = options
+        super().__init__(name, connection)
+
+    def _fetchIDfromDB(self):
+        search_query = "SELECT product.product_id" \
+                       " FROM `product`" \
+                       " WHERE product.model=" + str(self._options.model) + \
+                       " AND product.sku=" + str(self._options.sku)
 
