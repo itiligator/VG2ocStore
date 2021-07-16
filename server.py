@@ -6,6 +6,7 @@ Usage::
 """
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import logging
+import json
 from main import import_to_db
 
 class S(BaseHTTPRequestHandler):
@@ -32,6 +33,7 @@ class S(BaseHTTPRequestHandler):
 
         with open("catalog.json", "w") as f:
             f.write(post_data.decode('utf-8'))
+        import_to_db(json.loads(post_data.decode('utf-8')))
 
 
 def run(server_class=HTTPServer, handler_class=S, port=8080):

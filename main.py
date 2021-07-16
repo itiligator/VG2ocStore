@@ -1,15 +1,17 @@
 import logging
 import re
 import json
+import os
 from mysql.connector import connect, Error
 from opencart_import import Product, ProductOptions
 
 
-logging.basicConfig(filename='importer.log', level=logging.DEBUG)
+logging.basicConfig(filename='importer.log', level=logging.DEBUG, encoding='utf-8')
 
 def import_to_db(catalog):
     try:
-        with open('config.php', 'r') as config_file:
+        config_filename = os.path.join(os.environ['VGPATH'], "config.php")
+        with open(config_filename, 'r') as config_file:
             config = {}
             DBConfig = re.compile(r"\s*define\s*\(\s*'(?P<key>.*?)'\s*,\s*'(?P<val>.*?)'\);")
             for line in config_file:
@@ -28,12 +30,10 @@ def import_to_db(catalog):
             password=config['DB_PASSWORD'],
             database=config['DB_PREFIX']+config['DB_DATABASE']
         ) as connection:
-            with open("JSON.txt", 'r', encoding='utf-8-sig') as f:
-                goods = json.load(f)
             pr_opt = ProductOptions(connection=connection)
-            pr = Product(options=pr_opt.generate(goods[116]), connection=connection, name='')
-            i = 0
-            l=len(goods)
+            pr = Product(options=pr_opt.generate(catalog[0]), connection=connection, name='')
+            l=len(catalog)
+            logging.info("Start importing " + str(l) + " goods from catalog")
 
             with connection.cursor() as cursor:
                 try:
@@ -43,11 +43,11 @@ def import_to_db(catalog):
                 except Error:
                     logging.exception("Something went wrong during setting status to 0")
 
-            for good in goods:
+            for good in catalog:
                 pr = Product(options=pr_opt.generate(good), connection=connection, name='')
                 pr.SyncWithDB()
-                i += 1
-                print(str(i) + "/" + str(l))
+
+            logging.info("Import Finished")
 
     except Error as e:
         logging.exception('Problem with DB connection')

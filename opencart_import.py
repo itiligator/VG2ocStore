@@ -442,7 +442,7 @@ class Product(OpencartObject):
                                " sku='" + str(self._options['sku']) + "', " \
                                " upc='', ean='', jan='', isbn='', mpn='', location='', " \
                                " quantity=" + str(self._options['quantity']) + ", stock_status_id=5, " \
-                               " image='product_" + str(self._options['sku']) + "_01.png, manufacturer_id=0, " \
+                               " image='product_" + str(self._options['sku']) + "_01.png', manufacturer_id=0, " \
                                " shipping=1, options_buy=0, price=" + str(self._options['price']) + ", " \
                                " points=0, tax_class_id=0, " \
                                " date_available='" + time.strftime('%Y-%m-%d') + "', " \
@@ -454,16 +454,6 @@ class Product(OpencartObject):
                 cursor.execute(insert_query)
 
                 lastid = cursor.lastrowid
-
-
-                insert_query = "INSERT INTO product_description" \
-                               " SET product_id=" + str(lastid) + ", " \
-                               " language_id=1, " \
-                               " name='" + self._options['name'] + "', " \
-                               " description='', short_description='', tag='', meta_title='', meta_description='', " \
-                               " meta_keyword='', meta_h1=''"
-                logging.debug(insert_query)
-                cursor.execute(insert_query)
 
                 insert_query = "INSERT INTO product_to_1c" \
                                " SET product_id=" + str(lastid) + ", " \
