@@ -539,5 +539,5 @@ class Product(OpencartObject):
 
     def updateOptions(self, options):
         self._options = options
-	self._ID = None
+        self._ID = None
 

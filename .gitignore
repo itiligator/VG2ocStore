@@ -1,3 +1,6 @@
 /venv/
 /config.php
 /catalog.json
+/venv
+/importer.log
+
