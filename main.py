@@ -1,8 +1,12 @@
 import logging
 import re
+import json
 from mysql.connector import connect, Error
+from opencart_import import Product, ProductOptions
+
 
 logging.basicConfig(filename='importer.log', level=logging.DEBUG)
+
 
 try:
     with open('config.php', 'r') as config_file:
@@ -24,11 +28,26 @@ try:
         password=config['DB_PASSWORD'],
         database=config['DB_PREFIX']+config['DB_DATABASE']
     ) as connection:
-        print(connection)
+        with open("JSON.txt", 'r', encoding='utf-8-sig') as f:
+            goods = json.load(f)
+        pr_opt = ProductOptions(connection=connection)
+        pr = Product(options=pr_opt.generate(goods[116]), connection=connection, name='')
+        i = 0
+        l=len(goods)
+
         with connection.cursor() as cursor:
-            show_table_query = "DESCRIBE product"
-            cursor.execute(show_table_query)
-            for db in cursor:
-                print(db)
+            try:
+                update_query = "UPDATE `product` SET status=0"
+                logging.debug(update_query)
+                cursor.execute(update_query)
+            except Error:
+                logging.exception("Something went wrong during setting status to 0")
+
+        for good in goods:
+            pr = Product(options=pr_opt.generate(good), connection=connection, name='')
+            pr.SyncWithDB()
+            i += 1
+            print(str(i) + "/" + str(l))
+
 except Error as e:
     logging.exception('Problem with DB connection')
