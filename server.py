@@ -31,9 +31,13 @@ class S(BaseHTTPRequestHandler):
         self._set_response()
         self.wfile.write("POST request for {}".format(self.path).encode('utf-8'))
 
-        with open("catalog.json", "w") as f:
-            f.write(post_data.decode('utf-8'))
-        import_to_db(json.loads(post_data.decode('utf-8')))
+        # with open("catalog.json", "w") as f:
+        #     f.write(post_data.decode('utf-8'))
+        try:
+            data = json.loads(post_data.decode('utf-8'))
+            import_to_db(data)
+        except json.decoder.JSONDecodeError:
+            logging.error("Bad encoding!")
 
 
 def run(server_class=HTTPServer, handler_class=S, port=8080):
