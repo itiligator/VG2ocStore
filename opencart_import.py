@@ -435,9 +435,9 @@ class Product(OpencartObject):
     def _updateImage(self, idx, one_c_code):
         with self._connection.cursor() as cursor:
             try:
-                basedir = "/vg/storage/image/"
+                basedir = "/vg/storage/image"
                 imagefile = "/catalog/goods/product_" + str(one_c_code) + "_01.png"
-                imagefullpath = os.path.join(basedir, imagefile)
+                imagefullpath = basedir + imagefile
                 logging.debug(imagefullpath)
                 if not Path(imagefullpath).is_file():
                     imagefile = ''
