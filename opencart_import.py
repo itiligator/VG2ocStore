@@ -2,7 +2,8 @@ import mysql.connector.connection
 import logging
 import time
 from datetime import datetime
-from pathlib import Path, PurePath
+from pathlib import Path
+import os
 
 
 class OpencartObject:
@@ -431,13 +432,12 @@ class Product(OpencartObject):
                 logging.exception("Something went wrong during clearing product stuff "
                                   + ', 1C code ' + self._options['model'])
 
-
     def _updateImage(self, idx, one_c_code):
         with self._connection.cursor() as cursor:
             try:
                 basedir = "/vg/storage/image"
                 imagefile = "/catalog/goods/product_" + str(one_c_code) + "_01.png"
-                if not Path(PurePath(basedir, imagefile)).is_file():
+                if not Path(os.path.join(basedir, imagefile)).is_file():
                     imagefile = ''
 
                 update_query = "UPDATE product" \
@@ -451,7 +451,6 @@ class Product(OpencartObject):
                 logging.exception("Something went wrong during updating image"
                                   + ', 1C code ' + str(self._options['model']))
 
-
     def _createObject(self):
         logging.debug('Creating product ' + self._options['name'] + ', код ' + self._options['model'])
         # вносим записи о товаре в таблицы
@@ -463,7 +462,7 @@ class Product(OpencartObject):
                                " sku='" + str(self._options['sku']) + "', " \
                                " upc='', ean='', jan='', isbn='', mpn='', location='', " \
                                " quantity=" + str(self._options['quantity']) + ", stock_status_id=5, " \
-                               " manufacturer_id=0, " \
+                               " manufacturer_id=0, image=''" \
                                " shipping=1, options_buy=0, price=" + str(self._options['price']) + ", " \
                                " points=0, tax_class_id=0, " \
                                " date_available='" + time.strftime('%Y-%m-%d') + "', " \
