@@ -8,9 +8,10 @@ from opencart_import import Product, ProductOptions
 
 logging.basicConfig(filename='importer.log', level=logging.DEBUG, encoding='utf-8')
 
+
 def import_to_db(catalog):
     try:
-        config_filename = os.path.join(os.environ['VGPATH'], "config.php")
+        config_filename = os.path.join("/vg/master", "config.php")
         with open(config_filename, 'r') as config_file:
             config = {}
             DBConfig = re.compile(r"\s*define\s*\(\s*'(?P<key>.*?)'\s*,\s*'(?P<val>.*?)'\);")
