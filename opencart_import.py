@@ -437,7 +437,9 @@ class Product(OpencartObject):
             try:
                 basedir = "/vg/storage/image"
                 imagefile = "/catalog/goods/product_" + str(one_c_code) + "_01.png"
-                if not Path(os.path.join(basedir, imagefile)).is_file():
+                imagefullpath = os.path.join(basedir, imagefile)
+                logging.debug(imagefullpath)
+                if not Path(imagefullpath).is_file():
                     imagefile = ''
 
                 update_query = "UPDATE product" \
