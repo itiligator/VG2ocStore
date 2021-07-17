@@ -44,7 +44,7 @@ def import_to_db(catalog):
                     logging.exception("Something went wrong during setting status to 0")
 
             for good in catalog:
-                pr = Product(options=pr_opt.generate(good), connection=connection, name='')
+                pr.updateOptions(pr_opt.generate(good))
                 pr.SyncWithDB()
 
             logging.info("Import Finished")
