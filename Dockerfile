@@ -1,19 +1,14 @@
 # syntax=docker/dockerfile:1
 
-FROM python:3.9.6 as builder
+FROM python:3.9.6-slim-buster AS base
 
-COPY requirements.txt requirements.txt
+FROM base AS builder
+COPY requirements.txt .
+RUN python -m pip install --user -r requirements.txt
 
-RUN pip3 install -r requirements.txt
-
-FROM python:3.9.6-slim
-
-WORKDIR /app
-
+FROM base AS release
 COPY --from=builder /root/.local /root/.local
-
 COPY . .
-
 EXPOSE 3001
-
+ENV PATH=/root/.local/bin:$PATH
 CMD [ "python3", "./server.py", "3001" ]
