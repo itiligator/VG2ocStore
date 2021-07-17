@@ -2,6 +2,7 @@ import mysql.connector.connection
 import logging
 import time
 from datetime import datetime
+from pathlib import Path, PurePath
 
 
 class OpencartObject:
@@ -431,6 +432,26 @@ class Product(OpencartObject):
                                   + ', 1C code ' + self._options['model'])
 
 
+    def _updateImage(self, idx, one_c_code):
+        with self._connection.cursor() as cursor:
+            try:
+                basedir = "/vg/storage/image"
+                imagefile = "/catalog/goods/product_" + str(one_c_code) + "_01.png"
+                if not Path(PurePath(basedir, imagefile)).is_file():
+                    imagefile = ''
+
+                update_query = "UPDATE product" \
+                               " SET image='" + imagefile + "' " \
+                               " WHERE product_id=" + idx
+
+                logging.debug(update_query)
+                cursor.execute(update_query)
+
+            except mysql.connector.Error:
+                logging.exception("Something went wrong during updating image"
+                                  + ', 1C code ' + self._options['model'])
+
+
     def _createObject(self):
         logging.debug('Creating product ' + self._options['name'] + ', код ' + self._options['model'])
         # вносим записи о товаре в таблицы
@@ -442,7 +463,7 @@ class Product(OpencartObject):
                                " sku='" + str(self._options['sku']) + "', " \
                                " upc='', ean='', jan='', isbn='', mpn='', location='', " \
                                " quantity=" + str(self._options['quantity']) + ", stock_status_id=5, " \
-                               " image='product_" + str(self._options['sku']) + "_01.png', manufacturer_id=0, " \
+                               " manufacturer_id=0, " \
                                " shipping=1, options_buy=0, price=" + str(self._options['price']) + ", " \
                                " points=0, tax_class_id=0, " \
                                " date_available='" + time.strftime('%Y-%m-%d') + "', " \
@@ -471,9 +492,12 @@ class Product(OpencartObject):
                 logging.debug(insert_query)
                 cursor.execute(insert_query)
 
+                self._clearStuff(self.ID)
+
                 self._writeCategories(lastid)
                 self._writeAttributes(lastid)
                 self._writeSpetial(lastid)
+                self._updateImage(lastid, self._options['model'])
 
                 insert_query = "INSERT INTO product_to_layout" \
                                " SET product_id=" + str(lastid) + ", " \
@@ -521,6 +545,7 @@ class Product(OpencartObject):
                 self._writeCategories(self.ID)
                 self._writeAttributes(self.ID)
                 self._writeSpetial(self.ID)
+                self._updateImage(self.ID, self._options['model'])
 
 
             except mysql.connector.Error:
