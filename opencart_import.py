@@ -442,14 +442,14 @@ class Product(OpencartObject):
 
                 update_query = "UPDATE product" \
                                " SET image='" + imagefile + "' " \
-                               " WHERE product_id=" + idx
+                               " WHERE product_id=" + str(idx)
 
                 logging.debug(update_query)
                 cursor.execute(update_query)
 
             except mysql.connector.Error:
                 logging.exception("Something went wrong during updating image"
-                                  + ', 1C code ' + self._options['model'])
+                                  + ', 1C code ' + str(self._options['model']))
 
 
     def _createObject(self):
