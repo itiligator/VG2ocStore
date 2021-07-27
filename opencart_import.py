@@ -465,7 +465,7 @@ class Product(OpencartObject):
                                " sku='" + str(self._options['sku']) + "', " \
                                " upc='', ean='', jan='', isbn='', mpn='" + str(self._options['mpn']) + "', location='', " \
                                " quantity=" + str(self._options['quantity']) + ", stock_status_id=5, " \
-                               " manufacturer_id=0, image=''" \
+                               " manufacturer_id=0, image='', " \
                                " shipping=1, options_buy=0, price=" + str(self._options['price']) + ", " \
                                " points=0, tax_class_id=0, " \
                                " date_available='" + time.strftime('%Y-%m-%d') + "', " \
