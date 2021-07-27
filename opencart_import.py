@@ -306,6 +306,7 @@ class ProductOptions:
             'sku': options['article'],
             'name': options['name'].replace("'", '"'),
             'price': options['price'],
+            'mpn': options['ONLINE'],
         }
 
         if options['sale'] == 1:
@@ -462,7 +463,7 @@ class Product(OpencartObject):
                 insert_query = "INSERT INTO product" \
                                " SET model=" + str(self._options['model']) + ", " \
                                " sku='" + str(self._options['sku']) + "', " \
-                               " upc='', ean='', jan='', isbn='', mpn='', location='', " \
+                               " upc='', ean='', jan='', isbn='', mpn='" + str(self._options['mpn']) + "', location='', " \
                                " quantity=" + str(self._options['quantity']) + ", stock_status_id=5, " \
                                " manufacturer_id=0, image=''" \
                                " shipping=1, options_buy=0, price=" + str(self._options['price']) + ", " \
@@ -527,6 +528,7 @@ class Product(OpencartObject):
                 update_query = "UPDATE product " \
                                " SET status=1, noindex=0, " \
                                " sku='" + str(self._options['sku']) + "', " \
+                               " mpn='" + str(self._options['mpn']) + "', " \
                                " quantity=" + str(self._options['quantity']) + ", " \
                                " price=" + str(self._options['price']) + ", " \
                                " date_available='" + time.strftime('%Y-%m-%d') + "', " \

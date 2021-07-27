@@ -6,7 +6,7 @@ from mysql.connector import connect, Error
 from opencart_import import Product, ProductOptions
 
 
-logging.basicConfig(filename='importer.log', level=logging.DEBUG, encoding='utf-8')
+logging.basicConfig(filename='importer.log', level=logging.INFO, encoding='utf-8')
 
 
 def import_to_db(catalog):

@@ -25,19 +25,25 @@ class S(BaseHTTPRequestHandler):
     def do_POST(self):
         content_length = int(self.headers['Content-Length']) # <--- Gets the size of data
         post_data = self.rfile.read(content_length) # <--- Gets the data itself
-#        logging.info("POST request,\nPath: %s\nHeaders:\n%s\n\nBody:\n%s\n",
-#                str(self.path), str(self.headers), post_data.decode('utf-8'))
-
-        self._set_response()
-        self.wfile.write("POST request for {}".format(self.path).encode('utf-8'))
 
         # with open("catalog.json", "w") as f:
         #     f.write(post_data.decode('utf-8'))
+        
         try:
             data = json.loads(post_data.decode('utf-8-sig'))
-            import_to_db(data)
         except json.decoder.JSONDecodeError:
-            logging.error("Bad encoding!")
+            logging.exception("Bad encoding!")
+
+        try:
+            import_to_db(data)
+            status = 'success'
+        except:
+            status = 'Error! See logs'
+            logging.exception("Something went wrong during import")
+
+        self._set_response()
+        self.wfile.write(status.encode('utf-8'))
+
 
 
 def run(server_class=HTTPServer, handler_class=S, port=8080):
