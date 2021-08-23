@@ -439,7 +439,7 @@ class Product(OpencartObject):
                                " product_id=" + str(idx) + ", "\
                                " description=" + self._options['GASTRO'] + ", "\
                                " language_id=1 , "\
-                               " heading='Гастрономия', "
+                               " heading='Гастрономия'"
                 logging.debug(insert_query)
                 cursor.execute(insert_query)
 
