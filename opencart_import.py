@@ -3,7 +3,6 @@ import logging
 import time
 from datetime import datetime
 from pathlib import Path
-import os
 
 
 class OpencartObject:
@@ -425,6 +424,25 @@ class Product(OpencartObject):
                 logging.debug(insert_query)
                 cursor.execute(insert_query)
 
+    # записываем дополнительную вкладку "Гастрономия"
+    def _writeGastro(self, idx):
+        if self._options['GASTRO'] is not None:
+            with self._connection.cursor() as cursor:
+                insert_query = "INSERT INTO product_tab " \
+                               " SET product_id=" + str(idx) + ", " \
+                               " sort_order=0, status=1"
+                logging.debug(insert_query)
+                cursor.execute(insert_query)
+                tab_id = cursor.lastrowid
+                insert_query = "INSERT INTO product_tab_desc " \
+                               " SET product_tab_id=" + str(tab_id) + ", " \
+                               " product_id=" + str(idx) + ", "\
+                               " description=" + self._options['GASTRO'] + ", "\
+                               " language_id=1 , "\
+                               " heading='Гастрономия', "
+                logging.debug(insert_query)
+                cursor.execute(insert_query)
+
     def _clearStuff(self, idx):
         with self._connection.cursor() as cursor:
             try:
@@ -435,6 +453,12 @@ class Product(OpencartObject):
                 logging.debug(delete_query)
                 cursor.execute(delete_query)
                 delete_query = "DELETE FROM product_special WHERE product_id=" + str(idx)
+                logging.debug(delete_query)
+                cursor.execute(delete_query)
+                delete_query = "DELETE FROM product_tab WHERE product_id=" + str(idx)
+                logging.debug(delete_query)
+                cursor.execute(delete_query)
+                delete_query = "DELETE FROM product_tab_desc WHERE product_id=" + str(idx)
                 logging.debug(delete_query)
                 cursor.execute(delete_query)
 
@@ -508,6 +532,7 @@ class Product(OpencartObject):
                 self._writeCategories(lastid)
                 self._writeAttributes(lastid)
                 self._writeSpetial(lastid)
+                self._writeGastro(lastid)
                 self._updateImage(lastid, self._options['model'])
 
                 insert_query = "INSERT INTO product_to_layout" \
@@ -557,6 +582,7 @@ class Product(OpencartObject):
                 self._writeCategories(self.ID)
                 self._writeAttributes(self.ID)
                 self._writeSpetial(self.ID)
+                self._writeGastro(self.ID)
                 self._updateImage(self.ID, self._options['model'])
 
 
