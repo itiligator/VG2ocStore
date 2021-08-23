@@ -426,7 +426,7 @@ class Product(OpencartObject):
 
     # записываем дополнительную вкладку "Гастрономия"
     def _writeGastro(self, idx):
-        if self._options['GASTRO'] is not None:
+        if len(self._options['GASTRO']) != 0:
             with self._connection.cursor() as cursor:
                 insert_query = "INSERT INTO product_tab " \
                                " SET product_id=" + str(idx) + ", " \
@@ -437,7 +437,7 @@ class Product(OpencartObject):
                 insert_query = "INSERT INTO product_tab_desc " \
                                " SET product_tab_id=" + str(tab_id) + ", " \
                                " product_id=" + str(idx) + ", "\
-                               " description=" + self._options['GASTRO'] + ", "\
+                               " description='" + self._options['GASTRO'] + "', "\
                                " language_id=1 , "\
                                " heading='Гастрономия'"
                 logging.debug(insert_query)
