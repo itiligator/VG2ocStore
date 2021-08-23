@@ -364,8 +364,7 @@ class Product(OpencartObject):
     def _fetchIDfromDB(self):
         search_query = "SELECT product.product_id" \
                        " FROM `product`" \
-                       " WHERE product.model=" + str(self._options['model']) + \
-                       " AND product.sku='" + str(self._options['sku']) + "'"
+                       " WHERE product.model=" + str(self._options['model']) + "'"
 
         with self._connection.cursor() as cursor:
             logging.debug(search_query)
