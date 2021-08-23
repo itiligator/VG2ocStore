@@ -287,6 +287,8 @@ class ProductOptions:
 
         self.color = Attribute('Цвет', self.wine_group, connection)
         self.taste = Attribute('Сахар', self.wine_group, connection)
+        self.region = Attribute('Регион', self.wine_group, connection)
+        self.sort = Attribute('Сорт винограда', self.wine_group, connection)
 
     def cat(self, tag):
         try:
@@ -307,6 +309,8 @@ class ProductOptions:
             'name': options['name'].replace("'", '"'),
             'price': options['price'],
             'mpn': options['ONLINE'],
+            'description': options['description'],
+            'GASTRO': options['GASTRO']
         }
 
         if options['sale'] == 1:
@@ -334,13 +338,19 @@ class ProductOptions:
             attributes[self.sturdiness.ID] = strud
 
         if options['country'] != '':
-            attributes[self.country.ID] = options['country']
+            attributes[self.country.ID] = options['country'].title()
 
         if options['taste'] != '':
             attributes[self.taste.ID] = options['taste']
 
         if options['color'] != '':
             attributes[self.color.ID] = options['color']
+
+        if options['SORT'] != '':
+            attributes[self.sort.ID] = options['SORT']
+
+        if options['REGION'] != '':
+            attributes[self.region.ID] = options['REGION']
 
         result['categories'] = categories
         result['attributes'] = attributes
