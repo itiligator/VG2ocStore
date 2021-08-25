@@ -5,6 +5,10 @@ from datetime import datetime
 from pathlib import Path
 
 
+def ekran(s):
+    return s.replace("'", '"').replace("\n", '<br>')
+
+
 class OpencartObject:
     def __init__(self, name, connection):
         self.name = name
@@ -306,13 +310,13 @@ class ProductOptions:
 
     def generate(self, options: dict):
         result = {
-            'model': options['code'],
-            'sku': options['article'],
-            'name': options['name'].replace("'", '"'),
-            'price': options['price'],
-            'mpn': options['ONLINE'],
-            'description': options['description'],
-            'GASTRO': options['GASTRO']
+            'model': ekran(options['code']),
+            'sku': ekran(options['article']),
+            'name': ekran(options['name']),
+            'price': ekran(options['price']),
+            'mpn': ekran(options['ONLINE']),
+            'description': ekran(options['description']),
+            'GASTRO': ekran(options['GASTRO'])
         }
 
         if options['sale'] == 1:
@@ -321,7 +325,7 @@ class ProductOptions:
             else:
                 saledate = datetime.utcfromtimestamp(options['end_date']).strftime('%Y-%m-%d')
             result['sale'] = {
-                "sale_price": options['sale_price'],
+                "sale_price": ekran(options['sale_price']),
                 "date_end": saledate
             }
         else:
@@ -333,45 +337,45 @@ class ProductOptions:
         attributes = {}
 
         if options['capacity'] != 0:
-            attributes[self.capacity.ID] = options['capacity']
+            attributes[self.capacity.ID] = ekran(options['capacity'])
 
         if options['sturdiness'] != 0:
-            strud = str(options['sturdiness']).replace("%", "") + "%"
+            strud = ekran(str(options['sturdiness']).replace("%", "") + "%")
             attributes[self.sturdiness.ID] = strud
 
         if options['country'] != '':
-            attributes[self.country.ID] = options['country'].title()
+            attributes[self.country.ID] = ekran(options['country'].title())
 
         if options['taste'] != '':
-            attributes[self.taste.ID] = options['taste']
+            attributes[self.taste.ID] = ekran(options['taste'])
 
         if options['color'] != '':
-            attributes[self.color.ID] = options['color']
+            attributes[self.color.ID] = ekran(options['color'])
 
         if options['SORT'] != '':
-            attributes[self.sort.ID] = options['SORT']
+            attributes[self.sort.ID] = ekran(options['SORT'])
 
         if options['REGION'] != '':
-            attributes[self.region.ID] = options['REGION']
+            attributes[self.region.ID] = ekran(options['REGION'])
         
         if options['sale'] == 1:
             attributes[self.sale.ID] = 1
         
         if options["type"]:
-            attributes[self.subtype.ID] = options["type"]
+            attributes[self.subtype.ID] = ekran(options["type"])
             
         if options['ONLINE']:
-            attributes[self.onlineonly.ID] = options["ONLINE"]
+            attributes[self.onlineonly.ID] = ekran(options["ONLINE"])
 
         result['categories'] = categories
         result['attributes'] = attributes
 
-        result['quantity'] = options['residue_avangard']
+        result['quantity'] = ekran(options['residue_avangard'])
         # for key, val in options.items():
         #     if key.isdigit():
         #         result['quantity'] += val
 
-        result['GUID'] = options['GUID']
+        result['GUID'] = ekran(options['GUID'])
 
         return result
 
