@@ -283,6 +283,9 @@ class ProductOptions:
         self.capacity = Attribute('Емкость', self.alco_group, connection)
         self.sturdiness = Attribute('Крепкость', self.alco_group, connection)
         self.country = Attribute('Страна', self.alco_group, connection)
+        self.onlineonly = Attribute('Только online', self.alco_group, connection)
+        self.sale = Attribute('Акция', self.alco_group, connection)
+        self.subtype = Attribute('Тип', self.alco_group, connection)
 
         self.color = Attribute('Цвет', self.wine_group, connection)
         self.taste = Attribute('Сахар', self.wine_group, connection)
@@ -350,6 +353,15 @@ class ProductOptions:
 
         if options['REGION'] != '':
             attributes[self.region.ID] = options['REGION']
+        
+        if options['sale'] == 1:
+            attributes[self.sale.ID] = 1
+        
+        if options["type"]:
+            attributes[self.subtype.ID] = options["type"]
+            
+        if options['ONLINE']:
+            attributes[self.onlineonly.ID] = options["ONLINE"]
 
         result['categories'] = categories
         result['attributes'] = attributes
