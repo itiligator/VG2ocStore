@@ -6,7 +6,7 @@ from pathlib import Path
 
 
 def ekran(s):
-    return s.replace("'", '"').replace("\n", '<br>')
+    return str(s).replace("'", '"').replace("\n", '<br>')
 
 
 class OpencartObject:
@@ -359,7 +359,7 @@ class ProductOptions:
             attributes[self.region.ID] = ekran(options['REGION'])
         
         if options['sale'] == 1:
-            attributes[self.sale.ID] = 1
+            attributes[self.sale.ID] = 'Скидка'
         
         if options["type"]:
             attributes[self.subtype.ID] = ekran(options["type"])
