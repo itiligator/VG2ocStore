@@ -1,7 +1,7 @@
 import mysql.connector.connection
 import logging
 import time
-from datetime import datetime
+from datetime import datetime, timedelta
 from pathlib import Path
 
 
@@ -323,7 +323,7 @@ class ProductOptions:
             if isinstance(options['end_date'], str):
                 saledate = '0000-00-00'
             else:
-                saledate = datetime.utcfromtimestamp(options['end_date']).strftime('%Y-%m-%d')
+                saledate = (datetime.utcfromtimestamp(options['end_date']) + timedelta(days=1)).strftime('%Y-%m-%d')
             result['sale'] = {
                 "sale_price": ekran(options['sale_price']),
                 "date_end": saledate
