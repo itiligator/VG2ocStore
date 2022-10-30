@@ -319,9 +319,6 @@ class ProductOptions:
             'price': escape(options['price']),
             'mpn': escape(options['ONLINE']),
             'description': escape(options['description']),
-            'GASTRO': escape(options['GASTRO']),
-            'VKUS': escape(options['VKUS']),
-            'AROMAT': escape(options['AROMAT'])
         }
 
         if options['sale'] == 1:
@@ -452,63 +449,6 @@ class Product(OpencartObject):
                 logging.debug(insert_query)
                 cursor.execute(insert_query)
 
-    # записываем дополнительную вкладку "Гастрономия"
-    def _writeGastro(self, idx):
-        if len(self._options['GASTRO']) != 0:
-            with self._connection.cursor() as cursor:
-                insert_query = "INSERT INTO product_tab " \
-                               " SET product_id=" + str(idx) + ", " \
-                               " sort_order=0, status=1"
-                logging.debug(insert_query)
-                cursor.execute(insert_query)
-                tab_id = cursor.lastrowid
-                insert_query = "INSERT INTO product_tab_desc " \
-                               " SET product_tab_id=" + str(tab_id) + ", " \
-                               " product_id=" + str(idx) + ", "\
-                               " description='" + self._options['GASTRO'] + "', "\
-                               " language_id=1 , "\
-                               " heading='Гастрономия'"
-                logging.debug(insert_query)
-                cursor.execute(insert_query)
-
-    # записываем дополнительную вкладку "Аромат"
-    def _writeAromat(self, idx):
-        if len(self._options['AROMAT']) != 0:
-            with self._connection.cursor() as cursor:
-                insert_query = "INSERT INTO product_tab " \
-                               " SET product_id=" + str(idx) + ", " \
-                               " sort_order=0, status=1"
-                logging.debug(insert_query)
-                cursor.execute(insert_query)
-                tab_id = cursor.lastrowid
-                insert_query = "INSERT INTO product_tab_desc " \
-                               " SET product_tab_id=" + str(tab_id) + ", " \
-                               " product_id=" + str(idx) + ", "\
-                               " description='" + self._options['AROMAT'] + "', "\
-                               " language_id=1 , "\
-                               " heading='Аромат'"
-                logging.debug(insert_query)
-                cursor.execute(insert_query)
-
-    # записываем дополнительную вкладку "Вкус"
-    def _writeVkus(self, idx):
-        if len(self._options['VKUS']) != 0:
-            with self._connection.cursor() as cursor:
-                insert_query = "INSERT INTO product_tab " \
-                               " SET product_id=" + str(idx) + ", " \
-                               " sort_order=0, status=1"
-                logging.debug(insert_query)
-                cursor.execute(insert_query)
-                tab_id = cursor.lastrowid
-                insert_query = "INSERT INTO product_tab_desc " \
-                               " SET product_tab_id=" + str(tab_id) + ", " \
-                               " product_id=" + str(idx) + ", "\
-                               " description='" + self._options['VKUS'] + "', "\
-                               " language_id=1 , "\
-                               " heading='Аромат'"
-                logging.debug(insert_query)
-                cursor.execute(insert_query)
-
     def _clearStuff(self, idx):
         with self._connection.cursor() as cursor:
             try:
@@ -599,9 +539,6 @@ class Product(OpencartObject):
                 self._writeCategories(lastid)
                 self._writeAttributes(lastid)
                 self._writeSpetial(lastid)
-                self._writeGastro(lastid)
-                self._writeVkus(lastid)
-                self._writeAromat(lastid)
                 self._updateImage(lastid, self._options['model'])
 
                 insert_query = "INSERT INTO product_to_layout" \
@@ -652,9 +589,6 @@ class Product(OpencartObject):
                 self._writeCategories(self.ID)
                 self._writeAttributes(self.ID)
                 self._writeSpetial(self.ID)
-                self._writeGastro(self.ID)
-                self._writeVkus(self.ID)
-                self._writeAromat(self.ID)
                 self._updateImage(self.ID, self._options['model'])
 
 
