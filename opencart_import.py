@@ -283,6 +283,7 @@ class ProductOptions:
         self.connection = connection
         self.alco_group = AttributeGroup('Алкогольные товары', self.connection)
         self.wine_group = AttributeGroup('Вино', self.connection)
+        self.eng_group = AttributeGroup('Наименование ENG', self.connection)
 
         self.capacity = Attribute('Емкость', self.alco_group, connection)
         self.sturdiness = Attribute('Крепкость', self.alco_group, connection)
@@ -295,6 +296,8 @@ class ProductOptions:
         self.taste = Attribute('Сахар', self.wine_group, connection)
         self.region = Attribute('Регион', self.wine_group, connection)
         self.sort = Attribute('Сорт винограда', self.wine_group, connection)
+
+        self.eng = Attribute('ENG', self.eng_group, connection)
 
     def cat(self, tag):
         try:
@@ -316,7 +319,9 @@ class ProductOptions:
             'price': escape(options['price']),
             'mpn': escape(options['ONLINE']),
             'description': escape(options['description']),
-            'GASTRO': escape(options['GASTRO'])
+            'GASTRO': escape(options['GASTRO']),
+            'VKUS': escape(options['VKUS']),
+            'AROMAT': escape(options['AROMAT'])
         }
 
         if options['sale'] == 1:
@@ -366,6 +371,9 @@ class ProductOptions:
             
         if options['ONLINE']:
             attributes[self.onlineonly.ID] = escape(options["ONLINE"])
+
+        if options['ENGNAME']:
+            attributes[self.eng.ID] = escape(options["ENGNAME"])
 
         result['categories'] = categories
         result['attributes'] = attributes
