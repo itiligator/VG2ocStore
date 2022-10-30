@@ -364,6 +364,21 @@ class ProductOptions:
         if options['REGION'] != '':
             attributes[self.region.ID] = escape(options['REGION'])
 
+        if options['noalco'] == '':
+            attributes[self.noalco.ID] = escape(options['REGION'])
+
+        if options['density'] != '':
+            attributes[self.density.ID] = escape(options['density'])
+
+        if options['type_package'] != '':
+            attributes[self.type_package.ID] = escape(options['type_package'])
+
+        if options['filtered'] != '':
+            attributes[self.filtered.ID] = escape(options['filtered'])
+
+        if options['packaged'] != '':
+            attributes[self.packaged.ID] = escape(options['packaged'])
+
         if options['sale'] == 1:
             attributes[self.sale.ID] = 'Скидка'
 
