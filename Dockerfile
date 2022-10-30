@@ -9,8 +9,8 @@ RUN python -m pip install --user -r requirements.txt
 FROM base AS release
 COPY --from=builder /root/.local /root/.local
 COPY . .
-EXPOSE 3001
+EXPOSE 3002
 ENV PATH=/root/.local/bin:$PATH
-CMD [ "python3", "./server.py", "3001" ]
+CMD [ "python3", "./server.py", "3002" ]
 
-#  docker run -v /var/www/vinograd24.ru/:/vg -p 3001:3001 -d --restart unless-stopped importer:v1
+#  docker run -v /var/www/salek.pro/:/vg -p 3002:3002 -d --restart unless-stopped salek_importer:v2
