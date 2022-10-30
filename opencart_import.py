@@ -375,14 +375,7 @@ class ProductOptions:
         result['categories'] = categories
         result['attributes'] = attributes
 
-        result['quantity'] = 0
-        for key, val in options.items():
-            if key.isdigit():
-                try:
-                    result['quantity'] += int(val)
-                except ValueError:
-                    pass
-
+        result['quantity'] = int(escape(options["residue_avangard"]))
 
         result['GUID'] = escape(options['GUID'])
 
