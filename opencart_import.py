@@ -322,8 +322,8 @@ class ProductOptions:
             'mpn': escape(options['ONLINE']),
             'description': escape(options['description']),
             'GASTRO': escape(options['GASTRO']),
-            'VKUS': escape(options['VKUS']),
-            'AROMAT': escape(options['AROMAT'])
+            'VKUS': escape(options.get('VKUS', "")),
+            'AROMAT': escape(options.get('AROMAT', ""))
         }
 
         if options['sale'] == 1:
