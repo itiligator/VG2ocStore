@@ -1,3 +1,5 @@
+from typing import Union
+
 import mysql.connector.connection
 import logging
 import time
@@ -53,7 +55,7 @@ class OpencartObject:
 
 class Category(OpencartObject):
 
-    def __init__(self, name: str, parent: 'Category', connection: mysql.connector.connection.MySQLConnection):
+    def __init__(self, name: str, parent: Union['Category', None], connection: mysql.connector.connection.MySQLConnection):
         logging.debug("Category initialization")
         super().__init__(name, connection)
         if parent is not None:
