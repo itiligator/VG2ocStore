@@ -283,7 +283,7 @@ class ProductOptions:
         self.connection = connection
         self.alco_group = AttributeGroup('Алкогольные товары', self.connection)
         self.wine_group = AttributeGroup('Вино', self.connection)
-        self.eng_group = AttributeGroup('Наименование ENG', self.connection)
+        self.common_group = AttributeGroup('Общие', self.connection)
 
         self.capacity = Attribute('Емкость', self.alco_group, connection)
         self.sturdiness = Attribute('Крепкость', self.alco_group, connection)
@@ -297,7 +297,7 @@ class ProductOptions:
         self.region = Attribute('Регион', self.wine_group, connection)
         self.sort = Attribute('Сорт винограда', self.wine_group, connection)
 
-        self.eng = Attribute('ENG', self.eng_group, connection)
+        self.eng = Attribute('Наименование (латиницей)', self.common_group, connection)
 
     def cat(self, tag):
         try:
@@ -385,7 +385,6 @@ class ProductOptions:
                     result['quantity'] += int(val)
                 except ValueError:
                     pass
-
 
         result['GUID'] = escape(options['GUID'])
 
