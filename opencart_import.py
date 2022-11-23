@@ -505,7 +505,7 @@ class Product(OpencartObject):
                                " product_id=" + str(idx) + ", "\
                                " description='" + self._options['VKUS'] + "', "\
                                " language_id=1 , "\
-                               " heading='Аромат'"
+                               " heading='Вкус'"
                 logging.debug(insert_query)
                 cursor.execute(insert_query)
 
