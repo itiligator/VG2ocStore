@@ -16,7 +16,6 @@ class S(BaseHTTPRequestHandler):
         self.end_headers()
 
     def do_GET(self):
-#        logging.info("GET request,\nPath:%s\nHeaders:\n%s\n", str(self.path), str(self.headers))
         self._set_response()
         # self.wfile.write("GET request for {}".format(self.path).encode('utf-8'))
         with open("importer.log", "r") as log:
@@ -28,15 +27,13 @@ class S(BaseHTTPRequestHandler):
 
         # with open("catalog.json", "w") as f:
         #     f.write(post_data.decode('utf-8'))
-        data = []
         try:
             data = json.loads(post_data.decode('utf-8-sig'))
-        except json.decoder.JSONDecodeError:
-            logging.exception("Bad encoding!")
-
-        try:
             import_to_db(data)
             status = 'success'
+        except json.decoder.JSONDecodeError:
+            logging.exception("Bad encoding!")
+            status = 'Error! Bad encoding'
         except:
             status = 'Error! See logs'
             logging.exception("Something went wrong during import")
