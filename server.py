@@ -28,7 +28,7 @@ class S(BaseHTTPRequestHandler):
 
         # with open("catalog.json", "w") as f:
         #     f.write(post_data.decode('utf-8'))
-        
+        data = []
         try:
             data = json.loads(post_data.decode('utf-8-sig'))
         except json.decoder.JSONDecodeError:
