@@ -9,6 +9,7 @@ import logging
 import json
 from main import import_to_db
 
+
 class S(BaseHTTPRequestHandler):
     def _set_response(self):
         self.send_response(200)
@@ -22,11 +23,8 @@ class S(BaseHTTPRequestHandler):
             self.wfile.write(log.read().encode('utf-8'))
 
     def do_POST(self):
-        content_length = int(self.headers['Content-Length']) # <--- Gets the size of data
-        post_data = self.rfile.read(content_length) # <--- Gets the data itself
-
-        # with open("catalog.json", "w") as f:
-        #     f.write(post_data.decode('utf-8'))
+        content_length = int(self.headers['Content-Length'])
+        post_data = self.rfile.read(content_length)
         try:
             data = json.loads(post_data.decode('utf-8-sig'))
             import_to_db(data)
@@ -42,7 +40,6 @@ class S(BaseHTTPRequestHandler):
         self.wfile.write(status.encode('utf-8'))
 
 
-
 def run(server_class=HTTPServer, handler_class=S, port=8080):
     logging.basicConfig(level=logging.INFO)
     server_address = ('', port)
@@ -54,6 +51,7 @@ def run(server_class=HTTPServer, handler_class=S, port=8080):
         pass
     httpd.server_close()
     logging.info('Stopping httpd...\n')
+
 
 if __name__ == '__main__':
     from sys import argv
