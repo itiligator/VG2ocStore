@@ -588,8 +588,8 @@ class Product(OpencartObject):
                                " SET product_id=" + str(lastid) + ", " \
                                " language_id=1, " \
                                " name='" + self._options['name'] + "', " \
-                               " description='" + self._options['description'] + \
-                               "', short_description='', tag='', meta_title='', meta_description='', " \
+                               " description='&lt;p&gt;" + self._options['description'] + \
+                               "&lt;/p&gt;', short_description='', tag='', meta_title='', meta_description='', " \
                                " meta_keyword='', meta_h1=''"
                 logging.debug(insert_query)
                 cursor.execute(insert_query)
@@ -642,7 +642,7 @@ class Product(OpencartObject):
 
                 insert_query = "UPDATE product_description " \
                                " SET name='" + self._options['name'] + "', " \
-                               " description='" + self._options['description'] + "' " \
+                               " description='&lt;p&gt;" + self._options['description'] + "&lt;/p&gt;' " \
                                " WHERE product_id=" + str(self.ID) + " "
                 logging.debug(insert_query)
                 cursor.execute(insert_query)
