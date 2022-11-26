@@ -1,3 +1,4 @@
+import os
 from typing import Union
 
 import mysql.connector.connection
@@ -147,7 +148,7 @@ class Category(OpencartObject):
         logging.debug('Updating category with name ' + self.name)
         if self.parent is not None and self.parent.ID is None:
             self.parent.SyncWithDB()
-        # обновляем (на самом деле приовдим в порядок) записи о категории в таблицах
+        # обновляем (на самом деле приводим в порядок) записи о категории в таблицах
         # category, category_to_layout, category_to_store,
         with self._connection.cursor() as cursor:
             try:
@@ -486,8 +487,8 @@ class Product(OpencartObject):
     def _updateImage(self, idx, one_c_code):
         with self._connection.cursor() as cursor:
             try:
-                basedir = "/vg/storage/image/"
-                imagefile = "catalog/goods/product_" + str(one_c_code) + "_01.png"
+                basedir = os.getcwd() + "/storage/image"
+                imagefile = "/catalog/goods/product_" + str(one_c_code) + "_01.png"
                 imagefullpath = basedir + imagefile
                 logging.debug(imagefullpath)
                 if not Path(imagefullpath).is_file():
