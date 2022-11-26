@@ -510,7 +510,7 @@ class Product(OpencartObject):
         with self._connection.cursor() as cursor:
             try:
                 insert_query = "INSERT INTO product" \
-                               " SET model=" + str(self._options['model']) + ", " \
+                               " SET model='" + str(self._options['model']) + "', " \
                                " sku='" + str(self._options['sku']) + "', " \
                                " upc='', ean='', jan='', isbn='', mpn='" + str(self._options['mpn']) + "', location='', " \
                                " quantity=" + str(self._options['quantity']) + ", stock_status_id=5, " \
@@ -576,7 +576,8 @@ class Product(OpencartObject):
         with self._connection.cursor() as cursor:
             try:
                 update_query = "UPDATE product " \
-                               " SET status=1, noindex=0, " \
+                               " SET model='" + str(self._options['model']) + "', " \
+                               "status=1, noindex=0, " \
                                " sku='" + str(self._options['sku']) + "', " \
                                " mpn='" + str(self._options['mpn']) + "', " \
                                " quantity=" + str(self._options['quantity']) + ", " \
