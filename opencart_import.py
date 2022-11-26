@@ -401,10 +401,9 @@ class Product(OpencartObject):
         super().__init__(name, connection)
 
     def _fetchIDfromDB(self):
-        search_query = "SELECT product.product_id" \
-                       " FROM `product`" \
-                       " WHERE product.model='" + str(self._options['model']) + "'"
-
+        search_query = "SELECT product_to_1c.product_id" \
+                       " FROM `product_to_1c`" \
+                       " WHERE product_to_1c.1c_id='" + self._options['GUID'] + "'"
         with self._connection.cursor() as cursor:
             logging.debug(search_query)
             cursor.execute(search_query)
@@ -413,8 +412,7 @@ class Product(OpencartObject):
                 logging.debug('Found same product in DB')
                 return result[0][0]
             else:
-                raise ValueError("Не нашли совпадений по коду " + self._options['model'] + " и артикулу "
-                                                                                         + self._options['sku'])
+                raise ValueError(f"Не нашли совпадений по GUID {self._options['GUID']}")
 
     def _writeAttributes(self, idx):
         with self._connection.cursor() as cursor:
