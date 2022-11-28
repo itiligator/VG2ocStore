@@ -375,7 +375,7 @@ class ProductOptions:
         if options['ONLINE']:
             attributes[self.onlineonly.ID] = escape(options["ONLINE"])
 
-        if options['ENGNAME']:
+        if options.get('ENGNAME', "") != "":
             attributes[self.eng.ID] = escape(options["ENGNAME"])
 
         result['categories'] = categories
