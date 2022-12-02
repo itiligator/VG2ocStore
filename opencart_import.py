@@ -297,7 +297,6 @@ class ProductOptions:
 
         self.color = Attribute('Цвет', self.wine_group, connection)
         self.taste = Attribute('Сахар', self.wine_group, connection)
-        self.region = Attribute('Регион', self.wine_group, connection)
         self.sort = Attribute('Сорт винограда', self.wine_group, connection)
 
         self.noalco = Attribute('Безалкогольное', self.beer_group, connection)
@@ -363,9 +362,6 @@ class ProductOptions:
 
         if options['SORT'] != '':
             attributes[self.sort.ID] = escape(options['SORT'])
-
-        if options['REGION'] != '':
-            attributes[self.region.ID] = escape(options['REGION'])
 
         if options['noalco'] == '':
             attributes[self.noalco.ID] = escape(options['REGION'])
