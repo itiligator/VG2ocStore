@@ -289,7 +289,7 @@ class ProductOptions:
         self.common_group = AttributeGroup('Общие', self.connection)
 
         self.capacity = Attribute('Емкость', self.alco_group, connection)
-        self.sturdiness = Attribute('Крепкость', self.alco_group, connection)
+        self.sturdiness = Attribute('Крепость', self.alco_group, connection)
         self.country = Attribute('Страна', self.alco_group, connection)
         self.onlineonly = Attribute('Только online', self.alco_group, connection)
         self.sale = Attribute('Акция', self.alco_group, connection)
@@ -348,8 +348,8 @@ class ProductOptions:
             attributes[self.capacity.ID] = escape(options['capacity'])
 
         if options['sturdiness'] != 0:
-            strud = escape(str(options['sturdiness']).replace("%", "") + "%")
-            attributes[self.sturdiness.ID] = strud
+            sturdiness = escape(str(options['sturdiness']).replace("%", "") + "%")
+            attributes[self.sturdiness.ID] = sturdiness
 
         if options['country'] != '':
             attributes[self.country.ID] = escape(options['country'].title())
