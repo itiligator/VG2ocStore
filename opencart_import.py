@@ -285,7 +285,6 @@ class ProductOptions:
         self.categories = {}
         self.connection = connection
         self.alco_group = AttributeGroup('Алкогольные товары', self.connection)
-        self.wine_group = AttributeGroup('Вино', self.connection)
         self.beer_group = AttributeGroup('Пиво', self.connection)
 
         self.capacity = Attribute('Емкость', self.alco_group, connection)
@@ -295,10 +294,9 @@ class ProductOptions:
         self.sale = Attribute('Акция', self.alco_group, connection)
         self.subtype = Attribute('Тип', self.alco_group, connection)
 
-        self.color = Attribute('Цвет', self.wine_group, connection)
-        self.taste = Attribute('Сахар', self.wine_group, connection)
-        self.sort = Attribute('Сорт винограда', self.wine_group, connection)
-
+        self.style = Attribute('Стиль', self.beer_group, connection)
+        self.color = Attribute('Цвет', self.beer_group, connection)
+        self.ibu = Attribute('Горечь IBU', self.beer_group, connection)
         self.noalco = Attribute('Безалкогольное', self.beer_group, connection)
         self.density = Attribute('Плотность', self.beer_group, connection)
         self.type_package = Attribute('Тип упаковки', self.beer_group, connection)
@@ -344,6 +342,8 @@ class ProductOptions:
 
         attributes = {}
 
+
+        # =========================== alco group ======================
         if options['capacity'] != 0:
             attributes[self.capacity.ID] = escape(options['capacity'])
 
@@ -354,14 +354,26 @@ class ProductOptions:
         if options['country'] != '':
             attributes[self.country.ID] = escape(options['country'].title())
 
-        if options['taste'] != '':
-            attributes[self.taste.ID] = escape(options['taste'])
+        if options['ONLINE']:
+            attributes[self.onlineonly.ID] = escape(options["ONLINE"])
+
+        if options['sale'] == 1:
+            attributes[self.sale.ID] = 'Скидка'
+
+        if options["type"]:
+            attributes[self.subtype.ID] = escape(options["type"])
+        # =========================== alco group ======================
+
+
+        # =========================== beer group ======================
+        if options.get('style', '') != '':
+            attributes[self.style.ID] = escape(options['style'])
 
         if options['color'] != '':
             attributes[self.color.ID] = escape(options['color'])
 
-        if options['SORT'] != '':
-            attributes[self.sort.ID] = escape(options['SORT'])
+        if options.get('ibu', '') != '':
+            attributes[self.ibu.ID] = escape(options['ibu'])
 
         if options['noalco'] == '':
             attributes[self.noalco.ID] = escape(options['REGION'])
@@ -378,14 +390,8 @@ class ProductOptions:
         if options['packaged'] != '':
             attributes[self.packaged.ID] = escape(options['packaged'])
 
-        if options['sale'] == 1:
-            attributes[self.sale.ID] = 'Скидка'
+        # =========================== beer group ======================
 
-        if options["type"]:
-            attributes[self.subtype.ID] = escape(options["type"])
-
-        if options['ONLINE']:
-            attributes[self.onlineonly.ID] = escape(options["ONLINE"])
 
         result['categories'] = categories
         result['attributes'] = attributes
