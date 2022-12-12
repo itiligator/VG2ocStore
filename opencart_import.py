@@ -301,6 +301,7 @@ class ProductOptions:
         self.density = Attribute('Плотность', self.beer_group, connection)
         self.type_package = Attribute('Тип упаковки', self.beer_group, connection)
         self.filtered = Attribute('Фильтрованное', self.beer_group, connection)
+        self.pasteurized = Attribute('Пастеризованное', self.beer_group, connection)
         self.packaged = Attribute('Разливное', self.beer_group, connection)
 
     def cat(self, tag):
@@ -366,17 +367,17 @@ class ProductOptions:
 
 
         # =========================== beer group ======================
-        if options.get('style', '') != '':
-            attributes[self.style.ID] = escape(options['style'])
+        if options.get('STYLE', '') != '':
+            attributes[self.style.ID] = escape(options['STYLE'])
 
         if options['color'] != '':
             attributes[self.color.ID] = escape(options['color'])
 
-        if options.get('ibu', '') != '':
-            attributes[self.ibu.ID] = escape(options['ibu'])
+        if options.get('IBU', '') != '':
+            attributes[self.ibu.ID] = escape(options['IBU'])
 
         if options['noalco'] == '':
-            attributes[self.noalco.ID] = escape(options['REGION'])
+            attributes[self.noalco.ID] = escape(options['noalco'])
 
         if options['density'] != '':
             attributes[self.density.ID] = escape(options['density'])
@@ -389,6 +390,9 @@ class ProductOptions:
 
         if options['packaged'] != '':
             attributes[self.packaged.ID] = escape(options['packaged'])
+
+        if options['PASTE'] != '':
+            attributes[self.pasteurized.ID] = escape(options['PASTE'])
 
         # =========================== beer group ======================
 
