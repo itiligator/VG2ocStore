@@ -391,8 +391,8 @@ class ProductOptions:
         if options['packaged'] != '':
             attributes[self.packaged.ID] = escape(options['packaged'])
 
-        if options['PASTE'] != '':
-            attributes[self.pasteurized.ID] = escape(options['PASTE'])
+        if options['PASTER'] != '':
+            attributes[self.pasteurized.ID] = escape(options['PASTER'])
 
         # =========================== beer group ======================
 
