@@ -15,4 +15,4 @@ WORKDIR /site_root
 CMD [ "python3", "/server.py", "3003" ]
 
 # docker build . -t vkusstory-importer:v3
-# docker run -v /var/www/vkusstory.pro/:/site_root -p 3003:3003 -d --restart unless-stopped vkusstory-importer:v3
+# docker run --net=host -v /var/www/vkusstory.pro/:/site_root -d --restart unless-stopped vkusstory-importer:v3
