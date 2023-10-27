@@ -9,7 +9,7 @@ RUN python -m pip install --user -r requirements.txt
 FROM base AS release
 COPY --from=builder /root/.local /root/.local
 COPY . .
-EXPOSE 3001
+EXPOSE 3003
 ENV PATH=/root/.local/bin:$PATH
 WORKDIR /site_root
 CMD [ "python3", "/server.py", "3003" ]
