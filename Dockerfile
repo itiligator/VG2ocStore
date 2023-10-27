@@ -15,4 +15,4 @@ WORKDIR /site_root
 CMD [ "python3", "/server.py", "3002" ]
 
 # docker build . -t salek-importer:v3
-# docker run -v /var/www/salek.pro/:/site_root -p 3002:3002 -d --restart unless-stopped salek-importer:v3
+# docker run --net=host -v /var/www/salek.pro/:/site_root -d --restart unless-stopped salek-importer:v3
