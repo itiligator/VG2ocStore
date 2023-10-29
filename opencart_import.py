@@ -400,7 +400,7 @@ class ProductOptions:
         result['categories'] = categories
         result['attributes'] = attributes
 
-        result['quantity'] = int(escape(options["residue_avangard"]))
+        result['quantity'] = int(float(escape(options["residue_avangard"])))
 
         result['GUID'] = escape(options['GUID'])
 
